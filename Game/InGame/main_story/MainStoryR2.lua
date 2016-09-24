@@ -19,14 +19,14 @@ function scene:createScene(event)
 	screenGroup.id = "screen"
 	local btnC1Att = {
 			x = display.contentWidth/2,
-			y = 300,
+			y = 265,
 			width = display.contentWidth - 50,
 			height = display.contentHeight/12
 
 		}
 	local btnC2Att = {
 		x = display.contentWidth/2,
-		y = 265,
+		y = 300,
 		width = display.contentWidth - 50,
 		height = display.contentHeight/12
 
@@ -86,17 +86,18 @@ function scene:createScene(event)
 	dialogBox = moduleRender.allRounder("DB","InGame","Dialog","NA")
 	--choices
 	butChoice1 = moduleRender.allRounder("BT","InGame","but",btnC1Att)
-	butChoice1.alpha = 1
+	butChoice1.alpha = 0
 	butChoice2 = moduleRender.allRounder("BT","InGame","but",btnC2Att)
-	butChoice2.alpha = 1
+	butChoice2.alpha = 0
 	
 	--text
 	question = moduleUtil.text("R2:Who are you? why are you forgering there?",23)
 	answerYes = moduleUtil.text("We are the R1 and we just this spot from the other side of the river",14)
 	answerYes.y = btnC1Att["y"]
-	answerNo = moduleUtil.text("No! we will force here as much as we want!",14)
+	answerYes.alpha = 0
+	answerNo = moduleUtil.text("No! we will forgce here as much as we want!",14)
 	answerNo.y = btnC2Att["y"]
-
+	answerNo.alpha = 0
 	
 
 
@@ -115,10 +116,8 @@ function scene:createScene(event)
 
 
 end
-local function bgShower()
-background2.alpha = 1
-race13.alpha = 1
-text2.alpha = 1
+local function choice(event)
+print(event.target.name)
 end
 local function changeBG(event)
 	
@@ -126,8 +125,17 @@ local function changeBG(event)
 	count = count+1
 	print(count)
 		if count == 1 then
-			text.alpha=0
-			text1.alpha = 1
+			question.alpha=0
+			answerYes.alpha=1
+			answerNo.alpha=1
+			butChoice2.alpha=1
+			butChoice1.alpha=1
+			race2.strokeWidth = 0
+			race1:setStrokeColor(255,0,0)
+			race1.strokeWidth = 3
+			screenGroup:removeEventListener( "touch", changeBG )
+			butChoice1:addEventListener( "touch", choice )
+			butChoice2:addEventListener( "touch", choice )
 		elseif count == 2 then
 			background.alpha =0
 			background1.alpha = 1
