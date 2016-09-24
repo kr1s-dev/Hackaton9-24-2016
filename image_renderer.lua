@@ -11,11 +11,13 @@ local btn
 renderer.physics = require "physics"
 renderer.storyboard = require ("storyboard")
 --background
-function renderer.allRounder(kind,loc,bG,btnAtt)
-	
-	Path = "Assets/"..loc.."/"..bG..".png"
-	image =display.newImage(Path)
-
+function renderer.allRounder(kind,loc,bG,Att)
+	if kind == "CH" then
+		Path = "Assets/"..loc.."/"..bG.."/"..Att["name"]..".png"
+	else
+		Path = "Assets/"..loc.."/"..bG..".png"
+	end
+		image =display.newImage(Path)
 	if kind == "BG" then
 		image.height = oAHeight
 		image.width = oAWidth
@@ -23,15 +25,20 @@ function renderer.allRounder(kind,loc,bG,btnAtt)
 		image.y = oAHeight/2
 	elseif kind == "BT" then
 		image:setReferencePoint(display.CenterReferencePoint)
-		image.x = btnAtt["x"]
-		image.y = btnAtt["y"]
-		image.width = btnAtt["width"]
-		image.height = btnAtt["height"]
+		image.x = Att["x"]
+		image.y = Att["y"]
+		image.width = Att["width"]
+		image.height = Att["height"]
 	elseif kind == "DB" then
 		image.width = oAWidth
 		image.height = 80
 		image.x = oAWidth/2
 		image.y = oAHeight - 40
+	elseif kind == "CH" then
+		image.width = Att["width"]
+		image.height = Att["height"]
+		image.x = Att["x"]
+		image.y = Att["y"]
 	end
 	
 	return image
