@@ -96,8 +96,10 @@ local function showRaceDescription(event)
 	if event.phase == "began" then
 		screenGroup:remove(descText)
 		if event.target.id == "r1" then
+			racePick = 1
 			descText = moduleUtil.text("A race composing of 100 members")
 		else
+			racePick = 0
 			descText = moduleUtil.text("A race composing of 30 members")
 		end
 		screenGroup:insert(descText)
@@ -109,7 +111,11 @@ end
 
 local function onConfirm(event)
 	if event.phase == "began" then
-		moduleUtil.storyboard.gotoScene("Game.InGame.intro_story.Story1")
+		if racePick == 1 then -- R1
+			moduleUtil.storyboard.gotoScene("Game.InGame.main_story.MainStoryR1")
+		elseif racePick == 0 then -- R2
+			moduleUtil.storyboard.gotoScene("Game.InGame.main_story.MainStoryR2")
+		end
 	end
 end
 
