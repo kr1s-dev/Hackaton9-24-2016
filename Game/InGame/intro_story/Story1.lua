@@ -12,7 +12,7 @@ local text
 local screenGroup 
 local count = 0
 -- background
-
+--sadsad
 function scene:createScene(event)
 
 	screenGroup = self.view
