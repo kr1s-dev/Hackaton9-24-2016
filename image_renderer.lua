@@ -94,8 +94,7 @@ function renderer.gif(location,attribute,portals)
 			loopCount = attribute["loopCount"],   -- Optional ; default is 0 (loop indefinitely)
 			loopDirection = attribute["loopDirection"]   -- Optional ; values include "forward" or "bounce"
 		}	
-		print(table.getn(portals))
-		print(portals[1].x)
+
 		for i = 1, table.getn(portals), 1 do
 			imageSheet = graphics.newImageSheet( location, options )
 			gifImage[i] = display.newSprite( imageSheet, sequenceData )

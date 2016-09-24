@@ -13,6 +13,8 @@ local screenGroup
 local count = 0
 local gamepad = {}
 local platforms = {}
+local allBord
+
 moduleUtil.physics.start()
 moduleUtil.physics.setGravity( 0,9.8)
 -- background
@@ -23,9 +25,9 @@ function scene:createScene(event)
 	screenGroup.id = "screen"
 
 	local charRace2Att = {
-			name = "charl", --name of the PNG file
-			x = display.contentWidth/2,
-			y = display.contentHeight/4,
+			name = "charr", --name of the PNG file
+			x = 50,
+			y = display.contentHeight/2.15,
 			width = 46,
 			height = 60
 	
@@ -56,20 +58,13 @@ function scene:createScene(event)
 	}
 	local smallobs2 = {
 			name = "small_platform", --name of the PNG file
-			x = display.contentWidth/2,
+			x = display.contentWidth/2+(display.contentWidth/14),
 			y = display.contentHeight/2,
 			width = 27,
 			height = 25
 	
 	}
-	local smallobs3 = {
-			name = "small_platform", --name of the PNG file
-			x = display.contentWidth/2 + (display.contentWidth/8),
-			y = display.contentHeight/2,
-			width = 27,
-			height = 25
-	
-	}
+
 	local smallobs4 = {
 			name = "small_platform", --name of the PNG file
 			x = display.contentWidth/2 + (display.contentWidth/4),
@@ -78,7 +73,9 @@ function scene:createScene(event)
 			height = 25
 	
 	}
-
+	local border = {"left","right","bottom"}
+	--boarders
+	allBord = moduleRender.borders(border)
 	--background image
 	--moduleRender.allRounder(type,location,file name,attribute)
 	--types:BG = background, CH = character, BT = button, DB = dialogbox
@@ -90,12 +87,11 @@ function scene:createScene(event)
 	platforms["larger"] = moduleRender.allRounder("PL","InGame","obstacles",largeObs2)
 	platforms["small1"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs1)
 	platforms["small2"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs2)
-	platforms["small3"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs3)
 	platforms["small4"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs4)
 	--races(chars)
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
 	race2.alpha = 1
-
+	
 	--sprites
 	--gamepad
 	-- to call per part, gamepad["left"],gamepad["right"],gamepad["mid"]
@@ -107,11 +103,13 @@ function scene:createScene(event)
 	screenGroup:insert(platforms["larger"])
 	screenGroup:insert(platforms["small1"])
 	screenGroup:insert(platforms["small2"])
-	screenGroup:insert(platforms["small3"])
 	screenGroup:insert(platforms["small4"])
 	screenGroup:insert(gamepad["left"])
 	screenGroup:insert(gamepad["right"])
 	screenGroup:insert(gamepad["mid"])
+	for i = 1, table.getn(allBord), 1 do
+		screenGroup:insert(allBord[i])
+	end
 	screenGroup:insert(race2)
 
 
@@ -121,15 +119,29 @@ end
 local function scrollThings(self,event)
 		self.rotation = 0
 		if self.pad == "left"  then   -----right x axis-------
-			print(">>"..self.x)
+
 			self.x = self.x - 4
 		elseif self.pad == "right"  then   -----right x axis-------
-			print(">>"..self.x)
+
 			self.x = self.x + 4
 		end
 end
 local function straight(self,event)
 		self.rotation = 0
+end
+local function teleporter(self,event)
+
+	if  event.target == allBord[1] then -- left border
+		print("<<<")
+		
+	elseif event.target == allBord[2] then
+		print(">>>")
+	elseif event.target == allBord[3] then
+		print("VVV")
+		transition.to(event.other, {x =50 , y= display.contentHeight/2.15, time=0})
+
+	end
+
 end
 local function walker(event)
 	if event.phase == "began" then
@@ -168,7 +180,7 @@ local function walker(event)
 			race2 = moduleRender.gif("Assets/Characters/R2/Sprite/right.png",attribute,char)
 			race2.pad = "right"
 			screenGroup:insert(race2)
-			moduleUtil.physics.addBody(race2,{friction=0.3,bounce=0 })
+			moduleUtil.physics.addBody(race2,{friction=50,bounce=0 })
 			race2.enterFrame = scrollThings               
 			Runtime:addEventListener("enterFrame", race2)
 			race2:play()
@@ -192,17 +204,24 @@ function scene:enterScene(event)
 	-- physics.addBody( bNew,"static" )
 -- btnNew.isBodyActive = false
 	--screenGroup:addEventListener("touch", walker)
-	moduleUtil.physics.addBody(platforms["large"],"static",{bounce=0 })
-	moduleUtil.physics.addBody(platforms["larger"],"static",{bounce=0 })
-	moduleUtil.physics.addBody(platforms["small1"],"static",{bounce=0 })
-	moduleUtil.physics.addBody(platforms["small2"],"static",{bounce=0 })
-	moduleUtil.physics.addBody(platforms["small3"],"static",{bounce=0 })
-	moduleUtil.physics.addBody(platforms["small4"],"static",{bounce=0 })
+	moduleUtil.physics.addBody(platforms["large"],"static",{friction=50,bounce=0 })
+	moduleUtil.physics.addBody(platforms["larger"],"static",{friction=50,bounce=0 })
+	moduleUtil.physics.addBody(platforms["small1"],"static",{friction=50,bounce=0 })
+	moduleUtil.physics.addBody(platforms["small2"],"static",{friction=50,bounce=0 })
+	moduleUtil.physics.addBody(platforms["small4"],"static",{friction=50,bounce=0 })
 	moduleUtil.physics.addBody(race2,{bounce=0 })
+
+	print(">>>"..table.getn(allBord))
+	for a = 1, table.getn(allBord), 1 do
+		moduleUtil.physics.addBody(allBord[a],"static",{friction=50,bounce=0 })
+		allBord[a].collision = teleporter           
+		allBord[a]:addEventListener( "collision", allBord[a])
+	end
 
 	gamepad["left"]:addEventListener("touch", walker)
 	gamepad["right"]:addEventListener("touch", walker)
 	gamepad["mid"]:addEventListener("touch", walker)
+	
 end
 
 function scene:exitScene(event)
