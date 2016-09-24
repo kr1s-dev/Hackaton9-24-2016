@@ -130,6 +130,12 @@ function scene:createScene(event)
 					display.contentHeight/2.12,
 					display.contentWidth/25,
 					display.contentHeight/16)
+
+	createArrayData("rightHolder",
+					display.contentWidth - (display.contentWidth/2.48),
+					display.contentHeight/2.32,
+					display.contentWidth/8,
+					display.contentHeight/6)
 	createArrayData("mid_platform",
 					display.contentWidth - (display.contentWidth/3.1),
 					display.contentHeight/2.12,
@@ -235,7 +241,7 @@ end
 -- Enter Scene
 function scene:enterScene(event)
 	for i=0,obsCount do
-		if platforms["obs"..i] ~= nil and i ~=2 then
+		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=11 then
 			moduleUtil.physics.addBody(platforms["obs"..i],"static",{ bounce=0 })
 		end
 	end
