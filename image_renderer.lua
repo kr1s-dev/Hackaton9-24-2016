@@ -12,7 +12,7 @@ renderer.physics = require "physics"
 renderer.storyboard = require ("storyboard")
 --background
 function renderer.allRounder(kind,loc,bG,Att)
-	if kind == "CH" then
+	if kind == "CH" or kind == "PL" then
 		Path = "Assets/"..loc.."/"..bG.."/"..Att["name"]..".png"
 	else
 		Path = "Assets/"..loc.."/"..bG..".png"
@@ -34,7 +34,7 @@ function renderer.allRounder(kind,loc,bG,Att)
 		image.height = 80
 		image.x = oAWidth/2
 		image.y = oAHeight - 40
-	elseif kind == "CH" then
+	elseif kind == "CH" or kind == "PL" then
 		image.width = Att["width"]
 		image.height = Att["height"]
 		image.x = Att["x"]
@@ -103,8 +103,8 @@ function renderer.gif(location,attribute,portals)
 			gifImage.anchory =0.5 
 			gifImage[i].x = portals[i].x
 			gifImage[i].y = portals[i].y
-			print(portals[i])
 		end
-	return gifImage
+		gifImage.speed = 4
+	return gifImage[1]
 end
 return renderer
