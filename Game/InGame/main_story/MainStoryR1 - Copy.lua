@@ -89,12 +89,12 @@ function scene:createScene(event)
 	--dialog box
 	dialogBox = moduleRender.allRounder("DB","InGame","Dialog","NA")
 	--dialog
-	text = moduleUtil.text("There's an Island that's in habited by many races",23)
-	text1 = moduleUtil.text("They each have their own man power,\nR1 having 100 and R2 having 30",23)
+	text = moduleUtil.text("There's an Island that's in habited by many races")
+	text1 = moduleUtil.text("They each have their own man power,\nR1 having 100 and R2 having 30")
 	text1.alpha = 0
-	text2 = moduleUtil.text("One day, one of the R1 forgerers \nsaw another location for forgering",23)
+	text2 = moduleUtil.text("One day, one of the R1 forgerers \nsaw another location for forgering")
 	text2.alpha = 0
-	text3 = moduleUtil.text("They decided to go and forge there",23)
+	text3 = moduleUtil.text("They decided to go and forge there")
 	text3.alpha = 0
 	
 

@@ -5,9 +5,9 @@ local oAHeight = display.contentHeight
 util.physics = require "physics"
 util.storyboard = require ("storyboard")
 --background
-function util.text(message)
+function util.text(message,font)
 	
-	myText= display.newText( message, 0, 0, native.systemFont, 23 )
+	myText= display.newText( message, 0, 0, native.systemFont,font)
 	myText:setReferencePoint(display.CenterReferencePoint)
 	myText:setTextColor(0,0,0)
 	-- myText.height = oAHeight

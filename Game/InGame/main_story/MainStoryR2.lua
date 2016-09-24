@@ -17,13 +17,20 @@ function scene:createScene(event)
 
 	screenGroup = self.view
 	screenGroup.id = "screen"
-	local btnNewAtt = {
+	local btnC1Att = {
 			x = display.contentWidth/2,
-			y = 200,
-			width = 1500,
-			height = 50
+			y = 300,
+			width = display.contentWidth - 50,
+			height = display.contentHeight/12
 
 		}
+	local btnC2Att = {
+		x = display.contentWidth/2,
+		y = 265,
+		width = display.contentWidth - 50,
+		height = display.contentHeight/12
+
+	}
 	local charRace1Att = {
 			name = "mall", --name of the PNG file
 			x = display.contentWidth/16,
@@ -49,68 +56,63 @@ function scene:createScene(event)
 	
 	}
 	local charRace21Att = {
-			name = "charr", --name of the PNG file
+			name = "charl", --name of the PNG file
 			x = display.contentWidth-(display.contentWidth/3),
 			y = display.contentHeight/2,
 			width = 40,
 			height = 40
 	
 	}
-	local charRace13Att = {
-			name = "mlb", --name of the PNG file
-			x = display.contentWidth/18,
-			y = display.contentHeight/2+(display.contentHeight/6),
-			width = 60,
-			height = 60
-	
-	}
+
 	--background image
 	--moduleRender.allRounder(type,location,file name,attribute)
 	--types:BG = background, CH = character, BT = button, DB = dialogbox
-	
-	background = moduleRender.allRounder("BG","InGame","island","NA")
-	background1 = moduleRender.allRounder("BG","InGame","fields","NA")
-	background1.alpha = 0
-	background2 = moduleRender.allRounder("BG","InGame","shore","NA")
-	background2.alpha = 0
 	background3 = moduleRender.allRounder("BG","InGame","forest","NA")
-	background3.alpha = 0
+	background3.alpha = 1
 	--races(chars)
 	race1 = moduleRender.allRounder("CH","Characters","R1",charRace1Att)
-	race1.alpha = 0
+	race1.alpha = 1
 	race11 = moduleRender.allRounder("CH","Characters","R1",charRace11Att)
-	race11.alpha = 0
+	race11.alpha = 1
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
-	race2.alpha = 0
+	race2.alpha = 1
+	race2:setStrokeColor(255,0,0)
+	race2.strokeWidth = 3
+	
 	race21 = moduleRender.allRounder("CH","Characters","R2",charRace21Att)
-	race21.alpha = 0
-	race13 = moduleRender.allRounder("CH","Characters","R1",charRace13Att)
-	race13.alpha = 0
+	race21.alpha = 1
+
 	--dialog box
 	dialogBox = moduleRender.allRounder("DB","InGame","Dialog","NA")
-	--dialog
-	text = moduleUtil.text("There's an Island that's in habited by many races",23)
-	text1 = moduleUtil.text("They each have their own man power,\nR1 having 100 and R2 having 30",23)
-	text1.alpha = 0
-	text2 = moduleUtil.text("One day, one of the R1 forgerers \nsaw another location for forgering",23)
-	text2.alpha = 0
-	text3 = moduleUtil.text("They decided to go and forge there",23)
-	text3.alpha = 0
+	--choices
+	butChoice1 = moduleRender.allRounder("BT","InGame","but",btnC1Att)
+	butChoice1.alpha = 1
+	butChoice2 = moduleRender.allRounder("BT","InGame","but",btnC2Att)
+	butChoice2.alpha = 1
+	
+	--text
+	question = moduleUtil.text("R2:Who are you? why are you forgering there?",23)
+	answerYes = moduleUtil.text("We are the R1 and we just this spot from the other side of the river",14)
+	answerYes.y = btnC1Att["y"]
+	answerNo = moduleUtil.text("No! we will force here as much as we want!",14)
+	answerNo.y = btnC2Att["y"]
+
 	
 
-	screenGroup:insert(background)
-	screenGroup:insert(background1)
-	screenGroup:insert(background2)
+
 	screenGroup:insert(background3)
 	screenGroup:insert(race1)
 	screenGroup:insert(race11)
 	screenGroup:insert(race2)
 	screenGroup:insert(race21)
-	screenGroup:insert(race13)
+
 	screenGroup:insert(dialogBox)
-	screenGroup:insert(text)
-	screenGroup:insert(text1)
-	screenGroup:insert(text3)
+	screenGroup:insert(butChoice1)
+	screenGroup:insert(butChoice2)
+	screenGroup:insert(question)
+	screenGroup:insert(answerYes)
+	screenGroup:insert(answerNo)
+
 
 end
 local function bgShower()
@@ -124,12 +126,6 @@ local function changeBG(event)
 	count = count+1
 	print(count)
 		if count == 1 then
-			background.alpha =0
-			background1.alpha = 1
-			race1.alpha = 1
-			race11.alpha = 1
-			race2.alpha = 1
-			race21.alpha = 1
 			text.alpha=0
 			text1.alpha = 1
 		elseif count == 2 then
