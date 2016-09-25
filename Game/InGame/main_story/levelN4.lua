@@ -13,13 +13,43 @@ local obsCount = 0
 local count = 0
 local gamepad = {}
 local platforms = {}
+local allBord = {}
+local isColide = false
+local conText
+local conDialogBox
+local conTextYes
+local conTextbutNo
+local conTextbutSubmit
+local butYes
+local butNo
+local butSubmit
 -- End of Variable Declaration
 
 -- Start Physics
 moduleUtil.physics.start()
 moduleUtil.physics.setGravity( 0,9.8)
 -- End of Start Physics
+local btnC1Att = {
+			x = display.contentWidth/2 - (display.contentWidth/6),
+			y = 300,
+			width = display.contentWidth/2 - (display.contentWidth/6),
+			height = display.contentHeight/12
 
+		}
+local btnC2Att = {
+		x = display.contentWidth/2 + (display.contentWidth/6),
+		y = 300,
+		width = display.contentWidth/2 - (display.contentWidth/6),
+		height = display.contentHeight/12
+
+	}
+local btSubAtt = {
+		x = display.contentWidth/2,
+		y = 265,
+		width = display.contentWidth/2,
+		height = display.contentHeight/12
+
+	}
 
 -- Function that adds Obstacles
 local function createArrayData(name,x,y,width,height)
@@ -46,6 +76,11 @@ function scene:createScene(event)
 	background.alpha = 1
 	-- End of Scene Background
 
+	-- Border
+	border = {"top","left","right","bottom"}
+	allBord = moduleRender.borders(border)
+	-- End of Border
+
 	-- Character Setup
 	charRace2Att = {
 		name = "charr", --name of the PNG file
@@ -68,7 +103,6 @@ function scene:createScene(event)
 	}
 	race3 = moduleRender.allRounder("CH","Characters","R3",charRace2Att)
 	race3.alpha1 = 1
-
 	-- End of Character Setup
 
 	-- Game Pads
@@ -172,10 +206,54 @@ function scene:createScene(event)
 
 
 	-- End of Obstacles
+	--button
+	 butYes = moduleRender.allRounder("BT","InGame","but",btnC1Att)
+	 butNo = moduleRender.allRounder("BT","InGame","but",btnC2Att)
+	 butSubmit = moduleRender.allRounder("BT","InGame","but",btSubAtt)
+	 butYes.alpha = 0
+	 butNo.alpha = 0
+	 butSubmit.alpha = 0
+	 --button text
+	conTextYes = moduleUtil.text("Yes",23)
+	conTextYes.x = btnC1Att["x"]
+	conTextYes.y = btnC1Att["y"]
+	conTextYes.alpha = 0
+	conTextbutNo = moduleUtil.text("No",23)
+	conTextbutNo.x = btnC2Att["x"]
+	conTextbutNo.y = btnC2Att["y"]
+	conTextbutNo.alpha = 0
+	conTextbutSubmit = moduleUtil.text("Submit",23)
+	conTextbutSubmit.x = btSubAtt["x"]
+	conTextbutSubmit.y = btSubAtt["y"]
+	conTextbutSubmit.alpha = 0
+	-- Dialog Box
+	conDialogBox = moduleRender.allRounder("DB","InGame","Dialog","NA")
+	conDialogBox.height = display.contentHeight/5
+	conDialogBox.alpha = 0
+
+	-- End of Dialog Box
 
 	screenGroup:insert(background)
+	for i=0,obsCount do
+		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=12 then
+			screenGroup:insert(platforms["obs"..i])
+		end
+	end
+
+	for b = 1, table.getn(allBord), 1 do
+		screenGroup:insert(allBord[b])
+	end
+
+	screenGroup:insert(conDialogBox)
 	screenGroup:insert(race2)
 	screenGroup:insert(race3)
+	
+	screenGroup:insert(butYes)
+	screenGroup:insert(butNo)
+	screenGroup:insert(butSubmit)
+	screenGroup:insert(conTextYes)
+	screenGroup:insert(conTextbutNo)
+	screenGroup:insert(conTextbutSubmit)
 	
 end
 --End of Create Scene
@@ -244,7 +322,7 @@ local function walker(event)
 		end
 	elseif event.phase == "ended" then
 		if event.target == gamepad["right"] or event.target == gamepad["left"]  then
-		race2:pause()
+		--race2:pause()
 		end
 		event.target.alpha = 0.5
 		Runtime:removeEventListener("enterFrame", race2)
@@ -254,18 +332,72 @@ local function walker(event)
 end
 -- End of Utility Function
 
+-- Function, after collision of two races
+local function showDialog(self,event)
+	
+	if event.other == race2 and isColide == false then
+		isColide = true
+		print("Colide")
+	end
+	if isColide then
+		
+		conText = moduleUtil.text("R2: We are here to seek help to mediate our situation at camp, \n some one took over our forgering spot")
+		transition.to( conDialogBox, { time=1000,alpha =1})
+		screenGroup:insert(conText)
+	end
+end
+-- End Function
+
+-- Function, change dialog after clicking dialogBox
+local function changeDialog(event)
+	if event.phase == "began" then
+		screenGroup:remove(conText)
+		conText = moduleUtil.text("R3: I understand your situation and I'm willing to help, \n but first you must solve these riddles.")
+		screenGroup:insert(conText)
+		
+	end
+end
+-- End Function
+
+-- Function that will teleport character if drop below
+local function teleporter(self,event)
+
+	if  event.target == allBord[1] then -- left border
+		transition.to(event.other, {x = event.other.x,y = display.contentHeight/2.5, time=0})
+	elseif event.target == allBord[2] then
+		--moduleUtil.storyboard.gotoScene("Game.InGame.main_story.levelN")
+	elseif event.target == allBord[3] then
+		
+	elseif event.target == allBord[4] then
+		transition.to(event.other, {x = display.contentWidth/16,y = display.contentHeight/2.5, time=0})
+	end
+
+end
+-- End of Function
 
 -- Enter Scene
 function scene:enterScene(event)
+	for i=1,10 do
+		print(i)
+	end
 	for i=0,obsCount do
 		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=12 then
 			moduleUtil.physics.addBody(platforms["obs"..i],"static",{ bounce=0 })
 		end
 	end
+	moduleUtil.physics.addBody(race3,{bounce=0 })
 	moduleUtil.physics.addBody(race2,{bounce=0 })
+	for a = 1, table.getn(allBord), 1 do
+		moduleUtil.physics.addBody(allBord[a],"static",{friction=50,bounce=0 })
+		allBord[a].collision = teleporter           
+		allBord[a]:addEventListener( "collision", allBord[a])
+	end
 	gamepad["left"]:addEventListener("touch", walker)
 	gamepad["right"]:addEventListener("touch", walker)
 	gamepad["mid"]:addEventListener("touch", walker)
+	race3.collision = showDialog
+	race3:addEventListener("collision",race3)
+	conDialogBox:addEventListener("touch",changeDialog)
 end
 -- End of Enter Scene
 

@@ -156,11 +156,14 @@ function scene:createScene(event)
 	-- End of Obstacles
 
 	screenGroup:insert(background)
-	for i = 1, table.getn(allBord), 1 do
-		screenGroup:insert(allBord[i])
+	for i=0,obsCount do
+		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=12 then
+			screenGroup:insert(platforms["obs"..i])
+		end
 	end
-	for a = 1, obsCount do
-		screenGroup:insert(platforms["obs"..a])
+
+	for b = 1, table.getn(allBord), 1 do
+		screenGroup:insert(allBord[b])
 	end
 
 	screenGroup:insert(gamepad["left"])
@@ -286,7 +289,7 @@ end
 -- Exit Scene
 function scene:exitScene(event)
 	for i=0,obsCount do
-		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=11 then
+		if platforms["obs"..i] ~= nil then
 			platforms["obs"..i].isBodyActive = false
 			platforms["obs"..i]:removeSelf()
 			platforms["obs"..i] = nil
