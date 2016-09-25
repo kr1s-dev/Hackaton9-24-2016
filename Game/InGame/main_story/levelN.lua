@@ -227,7 +227,9 @@ local function walker(event)
 		end
 	elseif event.phase == "ended" then
 		if event.target == gamepad["right"] or event.target == gamepad["left"]  then
-		race2:pause()
+	
+		--race2:pause()
+
 		end
 		event.target.alpha = 0.5
 		Runtime:removeEventListener("enterFrame", race2)

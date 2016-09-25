@@ -136,6 +136,7 @@ local function teleporter(self,event)
 		
 	elseif event.target == allBord[2] then
 		print(">>>")
+		moduleUtil.storyboard.gotoScene("Game.InGame.main_story.levelN")
 	elseif event.target == allBord[3] then
 		print("VVV")
 		transition.to(event.other, {x =50 , y= display.contentHeight/2.15, time=0})
@@ -225,8 +226,32 @@ function scene:enterScene(event)
 end
 
 function scene:exitScene(event)
-	
+	for a = 1, table.getn(allBord), 1 do          
+		allBord[a]:removeEventListener( "collision", allBord[a])
+	end
+	gamepad["left"]:removeEventListener("touch", walker)
+	gamepad["right"]:removeEventListener("touch", walker)
+	gamepad["mid"]:removeEventListener("touch", walker)
 	Runtime:removeEventListener("enterFrame", race2)
+	race2.isBodyActive = false
+	platforms["large"].isBodyActive = false
+	platforms["larger"].isBodyActive = false
+	platforms["small1"].isBodyActive = false
+	platforms["small2"].isBodyActive = false
+	platforms["small4"].isBodyActive = false
+	race2:removeSelf()
+	platforms["large"]:removeSelf()
+	platforms["larger"]:removeSelf()
+	platforms["small1"]:removeSelf()
+	platforms["small2"]:removeSelf()
+	platforms["small4"]:removeSelf()
+	
+	race2= nil
+	platforms["large"]= nil
+	platforms["larger"]= nil
+	platforms["small1"]= nil
+	platforms["small2"]= nil
+	platforms["small4"]= nil
 	screenGroup:removeSelf()
 	screenGroup=nil
 
