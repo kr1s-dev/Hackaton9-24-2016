@@ -61,7 +61,7 @@ function scene:createScene(event)
 		x = display.contentWidth/16,
 		y = display.contentHeight/2.5,
 		width = 30,
-		height = 30
+		height = 38
 	
 	}
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
@@ -226,7 +226,7 @@ local function walker(event)
 	if event.phase == "began" then
 	local attribute = {
 		width = 30,
-		height = 30,
+		height = 38,
 		numFramesInSheet = 3,
 		name = "walking",
 		start = 1,
@@ -270,7 +270,7 @@ local function walker(event)
 		end
 	elseif event.phase == "ended" then
 		if event.target == gamepad["right"] or event.target == gamepad["left"]  then
-		race2:pause()
+		--race2:pause()
 		end
 		event.target.alpha = 0.5
 		Runtime:removeEventListener("enterFrame", race2)

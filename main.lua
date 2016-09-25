@@ -8,9 +8,9 @@ storyboard.purgeOnSceneChange = false
 --storyboard.gotoScene("Game.InGame.picking_a_race.pick_a_race")
 --storyboard.gotoScene("Game.InGame.main_story.levelN")
 --storyboard.gotoScene("Game.InGame.main_story.levelN4")
---storyboard.gotoScene("Game.InGame.main_story.level1")
+storyboard.gotoScene("Game.InGame.main_story.level1")
 --storyboard.gotoScene("Game.InGame.main_story.levelN")
-storyboard.gotoScene("Game.InGame.main_story.levelN4")
+--storyboard.gotoScene("Game.InGame.main_story.levelN4")
 
 
 

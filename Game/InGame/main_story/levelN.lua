@@ -52,8 +52,8 @@ function scene:createScene(event)
 		name = "charr", --name of the PNG file
 		x = display.contentWidth/16,
 		y = display.contentHeight - display.contentHeight/2.4,
-		width = 46,
-		height = 60
+		width = 30,
+		height = 38
 	
 	}
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
@@ -208,8 +208,8 @@ end
 local function walker(event)
 	if event.phase == "began" then
 	local attribute = {
-		width = 46,
-		height = 60,
+		width = 30,
+		height = 38,
 		numFramesInSheet = 3,
 		name = "walking",
 		start = 1,
