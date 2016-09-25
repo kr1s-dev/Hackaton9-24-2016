@@ -156,6 +156,11 @@ function scene:createScene(event)
 	-- End of Obstacles
 
 	screenGroup:insert(background)
+	for i=0,obsCount do
+		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=12 then
+			screenGroup:insert(platforms["obs"..i])
+		end
+	end
 	screenGroup:insert(gamepad["left"])
 	screenGroup:insert(gamepad["right"])
 	screenGroup:insert(gamepad["mid"])
