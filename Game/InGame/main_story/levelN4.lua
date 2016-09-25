@@ -13,7 +13,6 @@ local obsCount = 0
 local count = 0
 local gamepad = {}
 local platforms = {}
-local allBord = {}
 -- End of Variable Declaration
 
 -- Start Physics
@@ -48,125 +47,136 @@ function scene:createScene(event)
 	-- End of Scene Background
 
 	-- Character Setup
-	local charRace2Att = {
+	charRace2Att = {
 		name = "charr", --name of the PNG file
 		x = display.contentWidth/16,
-		y = display.contentHeight - display.contentHeight/2.4,
-		width = 46,
-		height = 60
+		y = display.contentHeight/2.5,
+		width = 30,
+		height = 30
 	
 	}
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
 	race2.alpha = 1
-	-- End of Character Setup
 
-	local border = {"left","right","bottom"}
-	--boarders
-	allBord = moduleRender.borders(border)
+
+	charRace2Att = {
+		name = "gaimon", --name of the PNG file
+		x = display.contentWidth/2.25,
+		y = display.contentHeight/1.65,
+		width = 46,
+		height = 60
+	}
+	race3 = moduleRender.allRounder("CH","Characters","R3",charRace2Att)
+	race3.alpha1 = 1
+
+	-- End of Character Setup
 
 	-- Game Pads
 	gamepad = moduleUtil.gamepad()
 	-- End of Game Pads
 
 	-- Obstacles
-
-	createArrayData("semilarge_platform",
+	createArrayData("small_platform",
 					display.contentWidth/16,
-					display.contentHeight/2 + (display.contentHeight/3),
-					display.contentWidth/8,
-					display.contentHeight/3)
+					display.contentHeight/2,
+					display.contentWidth/20,
+					display.contentHeight/14)
 
 	createArrayData("small_platform",
-					display.contentWidth/2 - (display.contentWidth/3),
-					display.contentHeight/1.8,
+					display.contentWidth/6,
+					display.contentHeight/1.7,
 					display.contentWidth/20,
 					display.contentHeight/14)
 
 	createArrayData("holder_log",
-					display.contentWidth/2 - (display.contentWidth/7),
-					display.contentHeight/2.32,
+					display.contentWidth/3.2,
+					display.contentHeight/1.48,
 					display.contentWidth/8,
 					display.contentHeight/6)
 
-	createArrayData("mid_platform",
-					display.contentWidth/2 - (display.contentWidth/4.5),
-					display.contentHeight/2.12,
-					display.contentWidth/8,
-					display.contentHeight/8)
+	createArrayData("semilarge_platform",
+					display.contentWidth/3.9,
+					display.contentHeight/1.2,
+					display.contentWidth/15,
+					display.contentHeight/3)
+
 
 	createArrayData("log",
-					display.contentWidth/2 - (display.contentWidth/7.1),
-					display.contentHeight/2.12,
+					display.contentWidth/3.15,
+					display.contentHeight/1.39,
 					display.contentWidth/25,
 					display.contentHeight/16)
 
 	createArrayData("log",
-					display.contentWidth/2 - (display.contentWidth/9.9),
-					display.contentHeight/2.1,
+					display.contentWidth/2.81,
+					display.contentHeight/1.38,
 					display.contentWidth/25,
 					display.contentHeight/16)
 
 	createArrayData("log",
-					display.contentWidth/2 - (display.contentWidth/16),
-					display.contentHeight/2.06,
+					display.contentWidth/2.54,
+					display.contentHeight/1.37,
 					display.contentWidth/25,
 					display.contentHeight/16)
 
 	createArrayData("log",
-					display.contentWidth - (display.contentWidth/1.91),
-					display.contentHeight/2.03,
+					display.contentWidth/2.32,
+					display.contentHeight/1.36,
+					display.contentWidth/25,
+					display.contentHeight/16)
+	createArrayData("log",
+					display.contentWidth/1.97,
+					display.contentHeight/1.37,
 					display.contentWidth/25,
 					display.contentHeight/16)
 
 	createArrayData("log",
-					display.contentWidth - (display.contentWidth/2.06),
-					display.contentHeight/2.06,
+					display.contentWidth/2.13,
+					display.contentHeight/1.36,
 					display.contentWidth/25,
 					display.contentHeight/16)
-
 	createArrayData("log",
-					display.contentWidth - (display.contentWidth/2.239),
-					display.contentHeight/2.1,
+					display.contentWidth/1.71,
+					display.contentHeight/1.39,
 					display.contentWidth/25,
 					display.contentHeight/16)
-	
 	createArrayData("log",
-					display.contentWidth - (display.contentWidth/2.45),
-					display.contentHeight/2.12,
+					display.contentWidth/1.83,
+					display.contentHeight/1.38,
 					display.contentWidth/25,
 					display.contentHeight/16)
 
 	createArrayData("rightHolder",
-					display.contentWidth - (display.contentWidth/2.48),
-					display.contentHeight/2.32,
+					display.contentWidth - (display.contentWidth/2.44),
+					display.contentHeight/1.48,
 					display.contentWidth/8,
 					display.contentHeight/6)
-	createArrayData("mid_platform",
-					display.contentWidth - (display.contentWidth/3.1),
-					display.contentHeight/2.12,
-					display.contentWidth/8,
-					display.contentHeight/8)
 
+	createArrayData("semilarge_platform",
+					display.contentWidth/1.55,
+					display.contentHeight/1.2,
+					display.contentWidth/15,
+					display.contentHeight/3)
 
 	createArrayData("small_platform",
-					display.contentWidth- (display.contentWidth/8.3),
-					display.contentHeight/1.8,
+					display.contentWidth/1.25,
+					display.contentHeight/1.44,
 					display.contentWidth/20,
 					display.contentHeight/14)
+
+	createArrayData("semilarge_platform",
+					display.contentWidth/1,
+					display.contentHeight/1.2,
+					display.contentWidth/6,
+					display.contentHeight/3)
+
+
 	-- End of Obstacles
 
 	screenGroup:insert(background)
-	for i = 1, table.getn(allBord), 1 do
-		screenGroup:insert(allBord[i])
-	end
-	for a = 1, obsCount do
-		screenGroup:insert(platforms["obs"..a])
-	end
-
-	screenGroup:insert(gamepad["left"])
-	screenGroup:insert(gamepad["right"])
-	screenGroup:insert(gamepad["mid"])
 	screenGroup:insert(race2)
+	screenGroup:insert(race3)
+	
 end
 --End of Create Scene
 
@@ -186,27 +196,11 @@ local function straight(self,event)
 	self.rotation = 0
 end
 
-local function teleporter(self,event)
-
-	if  event.target == allBord[1] then -- left border
-		print("<<<")
-		
-	elseif event.target == allBord[2] then
-		print(">>>")
-		moduleUtil.storyboard.gotoScene("Game.InGame.main_story.levelN4")
-	elseif event.target == allBord[3] then
-		print("VVV")
-		transition.to(event.other, {x =50 , y= display.contentHeight/2.15, time=0})
-
-	end
-
-end
-
 local function walker(event)
 	if event.phase == "began" then
 	local attribute = {
-		width = 46,
-		height = 60,
+		width = 30,
+		height = 30,
 		numFramesInSheet = 3,
 		name = "walking",
 		start = 1,
@@ -250,9 +244,7 @@ local function walker(event)
 		end
 	elseif event.phase == "ended" then
 		if event.target == gamepad["right"] or event.target == gamepad["left"]  then
-
-		--race2:pause()
-
+		race2:pause()
 		end
 		event.target.alpha = 0.5
 		Runtime:removeEventListener("enterFrame", race2)
@@ -266,14 +258,9 @@ end
 -- Enter Scene
 function scene:enterScene(event)
 	for i=0,obsCount do
-		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=11 then
+		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=12 then
 			moduleUtil.physics.addBody(platforms["obs"..i],"static",{ bounce=0 })
 		end
-	end
-	for a = 1, table.getn(allBord), 1 do
-		moduleUtil.physics.addBody(allBord[a],"static",{friction=50,bounce=0 })
-		allBord[a].collision = teleporter           
-		allBord[a]:addEventListener( "collision", allBord[a])
 	end
 	moduleUtil.physics.addBody(race2,{bounce=0 })
 	gamepad["left"]:addEventListener("touch", walker)
@@ -285,25 +272,7 @@ end
 
 -- Exit Scene
 function scene:exitScene(event)
-	for i=0,obsCount do
-		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=11 then
-			platforms["obs"..i].isBodyActive = false
-			platforms["obs"..i]:removeSelf()
-			platforms["obs"..i] = nil
-		end
-	end
-	for i = 1, table.getn(allBord), 1 do
-		allBord[i].isBodyActive = false
-		allBord[i]:removeSelf()
-		allBord[i]= nil
-	end
-	Runtime:removeEventListener("enterFrame", race2)
-	race2.isBodyActive = false
-	race2:removeSelf()
-	race2 = nil
-	gamepad["left"]:removeEventListener("touch", walker)
-	gamepad["right"]:removeEventListener("touch", walker)
-	gamepad["mid"]:removeEventListener("touch", walker)
+
 end
 -- End of Exit Scene
 

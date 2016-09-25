@@ -91,7 +91,10 @@ function scene:createScene(event)
 	--races(chars)
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
 	race2.alpha = 1
-	
+	--dialog
+	dialogbox = moduleRender.allRounder("DB","InGame","Dialog","NA")
+	--text 
+	text = moduleUtil.text("i must seek help to mediate this situation",23)
 	--sprites
 	--gamepad
 	-- to call per part, gamepad["left"],gamepad["right"],gamepad["mid"]
@@ -111,6 +114,8 @@ function scene:createScene(event)
 		screenGroup:insert(allBord[i])
 	end
 	screenGroup:insert(race2)
+	screenGroup:insert(dialogbox)
+	screenGroup:insert(text)
 
 
 
@@ -143,6 +148,11 @@ local function teleporter(self,event)
 
 	end
 
+end
+local function fader()
+dialogbox.alpha = 0
+text.alpha = 0
+screenGroup:removeEventListener("touch", fader)
 end
 local function walker(event)
 	if event.phase == "began" then
@@ -218,7 +228,7 @@ function scene:enterScene(event)
 		allBord[a].collision = teleporter           
 		allBord[a]:addEventListener( "collision", allBord[a])
 	end
-
+	screenGroup:addEventListener("touch", fader)
 	gamepad["left"]:addEventListener("touch", walker)
 	gamepad["right"]:addEventListener("touch", walker)
 	gamepad["mid"]:addEventListener("touch", walker)
@@ -233,6 +243,11 @@ function scene:exitScene(event)
 	gamepad["right"]:removeEventListener("touch", walker)
 	gamepad["mid"]:removeEventListener("touch", walker)
 	Runtime:removeEventListener("enterFrame", race2)
+	for i = 1, table.getn(allBord), 1 do
+		allBord[i].isBodyActive = false
+		allBord[i]:removeSelf()
+		allBord[i]= nil
+	end
 	race2.isBodyActive = false
 	platforms["large"].isBodyActive = false
 	platforms["larger"].isBodyActive = false
