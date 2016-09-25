@@ -166,7 +166,7 @@ screenGroup:addEventListener( "touch", changeBG )
 end
 
 function scene:exitScene(event)
-
+screenGroup:removeEventListener( "touch", changeBG )
 	screenGroup:removeSelf()
 	screenGroup=nil
 

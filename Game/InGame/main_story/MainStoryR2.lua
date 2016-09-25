@@ -158,22 +158,20 @@ local function choice(event)
 			butChoice1:removeEventListener( "touch", choice )
 			butChoice2:removeEventListener( "touch", choice )
 			screenGroup:addEventListener( "touch", changeBG )
-			
-			print(">>this is")
 		elseif event.target == butChoice2 and count == 6 then
 			bool = false
 			screenGroup:remove(question)
-			question = moduleUtil.text("R1 goes back to camp and comes back with an army and takes over the forging spot from R2",23)
+			question = moduleUtil.text("R1 goes back to camp and comes back with an army and\n takes over the forging spot from R2",23)
 			screenGroup:insert(question)
 			race2.strokeWidth = 0
 			race1.strokeWidth = 0
 			butChoice1:removeEventListener( "touch", choice )
 			butChoice2:removeEventListener( "touch", choice )
 			screenGroup:addEventListener( "touch", changeBG )
-			
+			print(count)
 			print(">>this is")
 		end
-	elseif event.phase == "ended" then
+	
 	end
 
 end
@@ -217,6 +215,7 @@ function changeBG(event)
 					question = moduleUtil.text("R2 goes away from the forging spot",23)
 					screenGroup:insert(question)
 					--transiton to next lua, adventure
+					timer.performWithDelay( 60000, moduleRender.storyboard.gotoScene("Game.InGame.main_story.level1") )
 				end
 		elseif count == 5 and bool then
 			transition.to( myRectangle, { time=500,alpha =0})
@@ -244,20 +243,31 @@ function changeBG(event)
 			screenGroup:removeEventListener( "touch", changeBG )
 			butChoice1:addEventListener( "touch", choice )
 			butChoice2:addEventListener( "touch", choice )
-		elseif count == 7 then
+		elseif count == 7 and bool == false then
 			transition.to( myRectangle, { time=500,alpha =1})
 					screenGroup:remove(question)
-					question = moduleUtil.text("R2 goes away from the forging spot",23)
+					question = moduleUtil.text("R1 goes back to camp and comes back with an army and\n takes over the forging spot from R2",23)
 					screenGroup:insert(question)
+					
 					--transiton to next lua, adventure
-		elseif count == 8 and bool then
-			race2.strokeWidth = 0
-			race1.strokeWidth = 0
-			screenGroup:remove(question)
-			question = moduleUtil.text("(2 leaders decided to meet and draft the ruling regarding \nsharing of the forgering spot(winnner, screen where 2 leaders meet and draft a ruling)",23)
-			screenGroup:insert(question)
-			transition.to( myRectangle, { time=500,alpha =1})
-			--winner
+		elseif count == 8 then
+			if bool then
+				race2.strokeWidth = 0
+				race1.strokeWidth = 0
+				screenGroup:remove(question)
+				question = moduleUtil.text("(2 leaders decided to meet and draft the ruling regarding \nsharing of the forgering spot(winnner, screen where 2 leaders meet and draft a ruling)",23)
+				screenGroup:insert(question)
+				transition.to( myRectangle, { time=500,alpha =1})
+				--winner
+			else
+				screenGroup:remove(question)
+				question = moduleUtil.text("R2 goes away from the forging spot",23)
+				screenGroup:insert(question)
+				--transiton to next lua, adventure
+				timer.performWithDelay( 60000, moduleRender.storyboard.gotoScene("Game.InGame.main_story.level1") )
+				
+			end
+			
 		end
 	end
 end
@@ -271,6 +281,8 @@ screenGroup:addEventListener( "touch", changeBG )
 end
 
 function scene:exitScene(event)
+	butChoice1:removeEventListener( "touch", choice )
+	butChoice2:removeEventListener( "touch", choice )
 	screenGroup:removeEventListener( "touch", changeBG )
 	screenGroup:removeSelf()
 	screenGroup=nil

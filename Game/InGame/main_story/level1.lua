@@ -91,7 +91,10 @@ function scene:createScene(event)
 	--races(chars)
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
 	race2.alpha = 1
-	
+	--dialog
+	dialogbox = moduleRender.allRounder("DB","InGame","Dialog","NA")
+	--text 
+	text = moduleUtil.text("i must seek help to mediate this situation",23)
 	--sprites
 	--gamepad
 	-- to call per part, gamepad["left"],gamepad["right"],gamepad["mid"]
@@ -111,6 +114,8 @@ function scene:createScene(event)
 		screenGroup:insert(allBord[i])
 	end
 	screenGroup:insert(race2)
+	screenGroup:insert(dialogbox)
+	screenGroup:insert(text)
 
 
 
@@ -136,12 +141,18 @@ local function teleporter(self,event)
 		
 	elseif event.target == allBord[2] then
 		print(">>>")
+		moduleUtil.storyboard.gotoScene("Game.InGame.main_story.levelN")
 	elseif event.target == allBord[3] then
 		print("VVV")
 		transition.to(event.other, {x =50 , y= display.contentHeight/2.15, time=0})
 
 	end
 
+end
+local function fader()
+dialogbox.alpha = 0
+text.alpha = 0
+screenGroup:removeEventListener("touch", fader)
 end
 local function walker(event)
 	if event.phase == "began" then
@@ -217,7 +228,7 @@ function scene:enterScene(event)
 		allBord[a].collision = teleporter           
 		allBord[a]:addEventListener( "collision", allBord[a])
 	end
-
+	screenGroup:addEventListener("touch", fader)
 	gamepad["left"]:addEventListener("touch", walker)
 	gamepad["right"]:addEventListener("touch", walker)
 	gamepad["mid"]:addEventListener("touch", walker)
@@ -225,8 +236,37 @@ function scene:enterScene(event)
 end
 
 function scene:exitScene(event)
-	
+	for a = 1, table.getn(allBord), 1 do          
+		allBord[a]:removeEventListener( "collision", allBord[a])
+	end
+	gamepad["left"]:removeEventListener("touch", walker)
+	gamepad["right"]:removeEventListener("touch", walker)
+	gamepad["mid"]:removeEventListener("touch", walker)
 	Runtime:removeEventListener("enterFrame", race2)
+	for i = 1, table.getn(allBord), 1 do
+		allBord[i].isBodyActive = false
+		allBord[i]:removeSelf()
+		allBord[i]= nil
+	end
+	race2.isBodyActive = false
+	platforms["large"].isBodyActive = false
+	platforms["larger"].isBodyActive = false
+	platforms["small1"].isBodyActive = false
+	platforms["small2"].isBodyActive = false
+	platforms["small4"].isBodyActive = false
+	race2:removeSelf()
+	platforms["large"]:removeSelf()
+	platforms["larger"]:removeSelf()
+	platforms["small1"]:removeSelf()
+	platforms["small2"]:removeSelf()
+	platforms["small4"]:removeSelf()
+	
+	race2= nil
+	platforms["large"]= nil
+	platforms["larger"]= nil
+	platforms["small1"]= nil
+	platforms["small2"]= nil
+	platforms["small4"]= nil
 	screenGroup:removeSelf()
 	screenGroup=nil
 

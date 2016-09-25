@@ -13,6 +13,7 @@ local obsCount = 0
 local count = 0
 local gamepad = {}
 local platforms = {}
+local allBord = {}
 -- End of Variable Declaration
 
 -- Start Physics
@@ -58,6 +59,10 @@ function scene:createScene(event)
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
 	race2.alpha = 1
 	-- End of Character Setup
+
+	local border = {"left","right","bottom"}
+	--boarders
+	allBord = moduleRender.borders(border)
 
 	-- Game Pads
 	gamepad = moduleUtil.gamepad()
@@ -142,11 +147,6 @@ function scene:createScene(event)
 					display.contentWidth/8,
 					display.contentHeight/8)
 
-	createArrayData("small_platform",
-					display.contentWidth- (display.contentWidth/4.9),
-					display.contentHeight/1.8,
-					display.contentWidth/20,
-					display.contentHeight/14)
 
 	createArrayData("small_platform",
 					display.contentWidth- (display.contentWidth/8.3),
@@ -161,6 +161,11 @@ function scene:createScene(event)
 			screenGroup:insert(platforms["obs"..i])
 		end
 	end
+
+	for b = 1, table.getn(allBord), 1 do
+		screenGroup:insert(allBord[b])
+	end
+
 	screenGroup:insert(gamepad["left"])
 	screenGroup:insert(gamepad["right"])
 	screenGroup:insert(gamepad["mid"])
@@ -182,6 +187,22 @@ end
 
 local function straight(self,event)
 	self.rotation = 0
+end
+
+local function teleporter(self,event)
+
+	if  event.target == allBord[1] then -- left border
+		print("<<<")
+		
+	elseif event.target == allBord[2] then
+		print(">>>")
+		moduleUtil.storyboard.gotoScene("Game.InGame.main_story.levelN4")
+	elseif event.target == allBord[3] then
+		print("VVV")
+		transition.to(event.other, {x =50 , y= display.contentHeight/2.15, time=0})
+
+	end
+
 end
 
 local function walker(event)
@@ -232,7 +253,9 @@ local function walker(event)
 		end
 	elseif event.phase == "ended" then
 		if event.target == gamepad["right"] or event.target == gamepad["left"]  then
-		race2:pause()
+
+		--race2:pause()
+
 		end
 		event.target.alpha = 0.5
 		Runtime:removeEventListener("enterFrame", race2)
@@ -250,6 +273,11 @@ function scene:enterScene(event)
 			moduleUtil.physics.addBody(platforms["obs"..i],"static",{ bounce=0 })
 		end
 	end
+	for a = 1, table.getn(allBord), 1 do
+		moduleUtil.physics.addBody(allBord[a],"static",{friction=50,bounce=0 })
+		allBord[a].collision = teleporter           
+		allBord[a]:addEventListener( "collision", allBord[a])
+	end
 	moduleUtil.physics.addBody(race2,{bounce=0 })
 	gamepad["left"]:addEventListener("touch", walker)
 	gamepad["right"]:addEventListener("touch", walker)
@@ -260,7 +288,25 @@ end
 
 -- Exit Scene
 function scene:exitScene(event)
-
+	for i=0,obsCount do
+		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=11 then
+			platforms["obs"..i].isBodyActive = false
+			platforms["obs"..i]:removeSelf()
+			platforms["obs"..i] = nil
+		end
+	end
+	for i = 1, table.getn(allBord), 1 do
+		allBord[i].isBodyActive = false
+		allBord[i]:removeSelf()
+		allBord[i]= nil
+	end
+	Runtime:removeEventListener("enterFrame", race2)
+	race2.isBodyActive = false
+	race2:removeSelf()
+	race2 = nil
+	gamepad["left"]:removeEventListener("touch", walker)
+	gamepad["right"]:removeEventListener("touch", walker)
+	gamepad["mid"]:removeEventListener("touch", walker)
 end
 -- End of Exit Scene
 
