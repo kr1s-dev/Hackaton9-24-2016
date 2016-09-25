@@ -28,8 +28,8 @@ function scene:createScene(event)
 			name = "charr", --name of the PNG file
 			x = 50,
 			y = display.contentHeight/2.15,
-			width = 46,
-			height = 60
+			width = 30,
+			height = 38
 	
 	}
 	local largeObs = {
@@ -58,7 +58,16 @@ function scene:createScene(event)
 	}
 	local smallobs2 = {
 			name = "small_platform", --name of the PNG file
-			x = display.contentWidth/2+(display.contentWidth/14),
+			x = display.contentWidth/2+(display.contentWidth/50),
+			y = display.contentHeight/2,
+			width = 27,
+			height = 25
+	
+	}
+
+	local smallobs3 = {
+			name = "small_platform", --name of the PNG file
+			x = display.contentWidth/2+(display.contentWidth/7),
 			y = display.contentHeight/2,
 			width = 27,
 			height = 25
@@ -87,6 +96,7 @@ function scene:createScene(event)
 	platforms["larger"] = moduleRender.allRounder("PL","InGame","obstacles",largeObs2)
 	platforms["small1"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs1)
 	platforms["small2"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs2)
+	platforms["small3"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs3)
 	platforms["small4"] = moduleRender.allRounder("PL","InGame","obstacles",smallobs4)
 	--races(chars)
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
@@ -106,6 +116,7 @@ function scene:createScene(event)
 	screenGroup:insert(platforms["larger"])
 	screenGroup:insert(platforms["small1"])
 	screenGroup:insert(platforms["small2"])
+	screenGroup:insert(platforms["small3"])
 	screenGroup:insert(platforms["small4"])
 	screenGroup:insert(gamepad["left"])
 	screenGroup:insert(gamepad["right"])
@@ -157,8 +168,8 @@ end
 local function walker(event)
 	if event.phase == "began" then
 	local attribute = {
-		width = 46,
-		height = 60,
+		width = 30,
+		height = 38,
 		numFramesInSheet = 3,
 		name = "walking",
 		start = 1,
@@ -219,6 +230,7 @@ function scene:enterScene(event)
 	moduleUtil.physics.addBody(platforms["larger"],"static",{friction=50,bounce=0 })
 	moduleUtil.physics.addBody(platforms["small1"],"static",{friction=50,bounce=0 })
 	moduleUtil.physics.addBody(platforms["small2"],"static",{friction=50,bounce=0 })
+	moduleUtil.physics.addBody(platforms["small3"],"static",{friction=50,bounce=0 })
 	moduleUtil.physics.addBody(platforms["small4"],"static",{friction=50,bounce=0 })
 	moduleUtil.physics.addBody(race2,{bounce=0 })
 

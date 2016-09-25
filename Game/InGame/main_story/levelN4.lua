@@ -17,6 +17,8 @@ local allBord = {}
 local isColide = false
 local conText
 local conDialogBox
+local count = 0
+
 local conTextYes
 local conTextbutNo
 local conTextbutSubmit
@@ -29,6 +31,7 @@ local butSubmit
 moduleUtil.physics.start()
 moduleUtil.physics.setGravity( 0,9.8)
 -- End of Start Physics
+
 local btnC1Att = {
 			x = display.contentWidth/2 - (display.contentWidth/6),
 			y = 300,
@@ -87,7 +90,7 @@ function scene:createScene(event)
 		x = display.contentWidth/16,
 		y = display.contentHeight/2.5,
 		width = 30,
-		height = 30
+		height = 38
 	
 	}
 	race2 = moduleRender.allRounder("CH","Characters","R2",charRace2Att)
@@ -206,6 +209,7 @@ function scene:createScene(event)
 
 
 	-- End of Obstacles
+
 	--button
 	 butYes = moduleRender.allRounder("BT","InGame","but",btnC1Att)
 	 butNo = moduleRender.allRounder("BT","InGame","but",btnC2Att)
@@ -226,6 +230,10 @@ function scene:createScene(event)
 	conTextbutSubmit.x = btSubAtt["x"]
 	conTextbutSubmit.y = btSubAtt["y"]
 	conTextbutSubmit.alpha = 0
+	
+	conText = moduleUtil.text("R2: We are here to seek help to mediate our situation at camp, \n some one took over our forgering spot")
+	conText.alpha = 0
+	
 	-- Dialog Box
 	conDialogBox = moduleRender.allRounder("DB","InGame","Dialog","NA")
 	conDialogBox.height = display.contentHeight/5
@@ -244,9 +252,11 @@ function scene:createScene(event)
 		screenGroup:insert(allBord[b])
 	end
 
-	screenGroup:insert(conDialogBox)
+
 	screenGroup:insert(race2)
 	screenGroup:insert(race3)
+	screenGroup:insert(conDialogBox)
+	screenGroup:insert(conText)
 	
 	screenGroup:insert(butYes)
 	screenGroup:insert(butNo)
@@ -278,7 +288,7 @@ local function walker(event)
 	if event.phase == "began" then
 	local attribute = {
 		width = 30,
-		height = 30,
+		height = 38,
 		numFramesInSheet = 3,
 		name = "walking",
 		start = 1,
@@ -340,21 +350,33 @@ local function showDialog(self,event)
 		print("Colide")
 	end
 	if isColide then
-		
-		conText = moduleUtil.text("R2: We are here to seek help to mediate our situation at camp, \n some one took over our forgering spot")
-		transition.to( conDialogBox, { time=1000,alpha =1})
-		screenGroup:insert(conText)
+		conText.alpha = 1
+		conDialogBox.alpha = 1
 	end
 end
 -- End Function
 
 -- Function, change dialog after clicking dialogBox
 local function changeDialog(event)
+
 	if event.phase == "began" then
-		screenGroup:remove(conText)
-		conText = moduleUtil.text("R3: I understand your situation and I'm willing to help, \n but first you must solve these riddles.")
-		screenGroup:insert(conText)
-		
+		count = count +1
+		if count == 1 then
+			screenGroup:remove(conText)
+			conText = moduleUtil.text("R3: I understand your situation and I'm willing to help, \n but first you must solve these riddles.")
+			screenGroup:insert(conText)
+		elseif count == 2 then
+			screenGroup:remove(conText)
+			conText = moduleUtil.text("Are You Ready?")
+			screenGroup:insert(conText)
+			 butYes.alpha = 1
+			 butNo.alpha = 1
+			 butSubmit.alpha = 0
+			 --button text
+			conTextYes.alpha = 1
+			conTextbutNo.alpha = 1
+			conTextbutSubmit.alpha = 0
+		end
 	end
 end
 -- End Function
@@ -374,7 +396,21 @@ local function teleporter(self,event)
 
 end
 -- End of Function
-
+local function pick(event)
+	if event.phase =="began" then
+		if event.target == butYes then
+		elseif event.target == butNo then
+			conDialogBox.alpha = 0
+			isColide = false
+			conText.alpha = 0
+			conTextYes.alpha = 0
+			conTextbutNo.alpha = 0
+			butYes.alpha = 0
+			butNo.alpha = 0
+			count = 0
+		end
+	end
+end
 -- Enter Scene
 function scene:enterScene(event)
 	for i=1,10 do
@@ -398,6 +434,8 @@ function scene:enterScene(event)
 	race3.collision = showDialog
 	race3:addEventListener("collision",race3)
 	conDialogBox:addEventListener("touch",changeDialog)
+	butYes:addEventListener("touch",pick)
+	butNo:addEventListener("touch",pick)
 end
 -- End of Enter Scene
 
