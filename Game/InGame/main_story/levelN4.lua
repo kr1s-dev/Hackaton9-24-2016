@@ -394,6 +394,9 @@ local function teleporter(self,event)
 				platforms["obs"..i].alpha = 0
 			end
 		end
+		gamepad["left"].alpha = 0
+	gamepad["right"].alpha = 0
+	gamepad["mid"].alpha = 0
 		moduleUtil.storyboard.gotoScene("Game.InGame.main_story.lastPart")
 	elseif event.target == allBord[4] then
 		transition.to(event.other, {x = display.contentWidth/16,y = display.contentHeight/2.5, time=0})
@@ -472,6 +475,9 @@ function scene:enterScene(event)
 			moduleUtil.physics.addBody(platforms["obs"..i],"static",{ bounce=0 })
 		end
 	end
+
+
+
 	moduleUtil.physics.addBody(race3,{bounce=0 })
 	moduleUtil.physics.addBody(race2,{bounce=0 })
 	for a = 1, table.getn(allBord), 1 do
