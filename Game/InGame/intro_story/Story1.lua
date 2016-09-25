@@ -152,7 +152,7 @@ local function changeBG(event)
 			race1.alpha = 1
 			race11.alpha = 1
 		elseif count == 4 then--toper's race chooser
-			moduleUtil.storyboard.gotoScene("Game.InGame.picking_a_race.pick_a_race")
+			moduleUtil.storyboard.gotoScene("Game.InGame.main_story.MainStoryR2")
 		end
 	end
 end

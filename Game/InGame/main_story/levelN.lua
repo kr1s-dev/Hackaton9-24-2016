@@ -289,7 +289,7 @@ end
 -- Exit Scene
 function scene:exitScene(event)
 	for i=0,obsCount do
-		if platforms["obs"..i] ~= nil and i ~= 2 and i ~=11 then
+		if platforms["obs"..i] ~= nil then
 			platforms["obs"..i].isBodyActive = false
 			platforms["obs"..i]:removeSelf()
 			platforms["obs"..i] = nil
